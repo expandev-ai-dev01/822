@@ -1,17 +1,14 @@
-/**
- * Global test setup configuration
- */
+import { config } from '../config';
 
-// Set environment variables for testing
-process.env.NODE_ENV = 'test';
-process.env.PORT = '3001';
+export const setupTestEnvironment = () => {
+  process.env.NODE_ENV = 'test';
+  process.env.DB_HOST = 'localhost';
+  process.env.DB_PORT = '1433';
+  process.env.DB_USER = 'sa';
+  process.env.DB_PASSWORD = 'test_password';
+  process.env.DB_NAME = 'test_helloworlddb';
+};
 
-// Mock dependencies as needed
-jest.mock('../utils/logger', () => ({
-  logger: {
-    info: jest.fn(),
-    error: jest.fn(),
-    warn: jest.fn(),
-    debug: jest.fn(),
-  },
-}));
+export const teardownTestEnvironment = () => {
+  // Cleanup logic here
+};

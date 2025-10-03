@@ -1,11 +1,9 @@
 import { Router } from 'express';
-import languageRoutes from './languageRoutes';
-import codeRoutes from './codeRoutes';
+import v1Routes from './v1';
 
 const router = Router();
 
-// Mount route groups
-router.use('/languages', languageRoutes);
-router.use('/code', codeRoutes);
+// Version 1 (current stable)
+router.use('/v1', v1Routes);
 
 export default router;

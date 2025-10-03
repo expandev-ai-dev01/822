@@ -1,33 +1,34 @@
-import express, { Application } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import compression from 'compression';
 import morgan from 'morgan';
 import { config } from './config';
-import { errorMiddleware } from './middleware/errorMiddleware';
-import { notFoundMiddleware } from './middleware/notFoundMiddleware';
-import routes from './routes';
-import { logger } from './utils/logger';
+import { errorMiddleware } from './middleware/error';
+import { notFoundMiddleware } from './middleware/notFound';
+import apiRoutes from './routes';
 
 const app: Application = express();
 
 // Security middleware
 app.use(helmet());
-app.use(cors(config.cors));
+app.use(cors(config.api.cors));
 
 // Request processing middleware
-app.use(express.json());
+app.use(compression());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Logging
 app.use(morgan('combined'));
 
-// Health check
-app.get('/health', (req, res) => {
+// Health check (no versioning)
+app.get('/health', (req: Request, res: Response) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
-// API Routes
-app.use('/api', routes);
+// API Routes with versioning
+app.use('/api', apiRoutes);
 
 // 404 handler
 app.use(notFoundMiddleware);
@@ -37,16 +38,16 @@ app.use(errorMiddleware);
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
-  logger.info('SIGTERM received, closing server gracefully');
+  console.log('SIGTERM received, closing server gracefully');
   server.close(() => {
-    logger.info('Server closed');
+    console.log('Server closed');
     process.exit(0);
   });
 });
 
 // Server startup
-const server = app.listen(config.port, () => {
-  logger.info(`Server running on port ${config.port} in ${config.nodeEnv} mode`);
+const server = app.listen(config.api.port, () => {
+  console.log(`Server running on port ${config.api.port} in ${process.env.NODE_ENV} mode`);
 });
 
 export default server;
