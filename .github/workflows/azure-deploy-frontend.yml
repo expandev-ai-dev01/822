@@ -55,12 +55,19 @@ jobs:
           if grep -q '"start"' package.json; then
             echo "Start script already exists in package.json"
           else
-            echo "WARNING: No start script found in package.json"
-            echo "Azure will use default Node.js static hosting"
+            echo "No start script found. Adding serve for static hosting..."
+            # Adicionar script start e dependência serve ao package.json existente
+            npm install serve --save
+            # Usar jq ou sed para adicionar o script start
+            if [ "$BUILD_DIR" == "dist" ]; then
+              # Para Vite (pasta dist)
+              node -e "const pkg=require('./package.json'); pkg.scripts.start='npx serve -s dist -l 8080'; require('fs').writeFileSync('./package.json', JSON.stringify(pkg, null, 2));"
+            else
+              # Para CRA (pasta build)
+              node -e "const pkg=require('./package.json'); pkg.scripts.start='npx serve -s build -l 8080'; require('fs').writeFileSync('./package.json', JSON.stringify(pkg, null, 2));"
+            fi
+            echo "Added start script to package.json"
           fi
-
-          # NÃO sobrescrever package.json!
-          # O projeto React deve ter seu próprio package.json com as configurações corretas
 
       - name: Zip artifact for deployment
         working-directory: ./frontend
