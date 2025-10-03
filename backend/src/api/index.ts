@@ -1,0 +1,6 @@
+// Central export point for API controllers
+// This file can be used to aggregate common API utilities
+
+// API controllers are organized by version and access level
+// External: /api/v1/external/...
+// Internal: /api/v1/internal/...
