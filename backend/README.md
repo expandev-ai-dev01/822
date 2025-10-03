@@ -1,13 +1,13 @@
 # Sistema Gerar Hello World - Backend
 
 ## Description
-Backend API for Hello World code generation system. This REST API provides endpoints for generating Hello World code snippets in multiple programming languages.
+Backend API for Hello World code generation system. This REST API provides endpoints for generating, viewing, and downloading Hello World code in multiple programming languages.
 
 ## Technology Stack
 - **Runtime**: Node.js
 - **Framework**: Express.js
 - **Language**: TypeScript
-- **Database**: SQL Server
+- **Database**: Microsoft SQL Server
 - **Validation**: Zod
 
 ## Project Structure
@@ -20,11 +20,14 @@ src/
 ├── routes/                 # Route definitions
 │   └── v1/                 # Version 1 routes
 ├── middleware/             # Express middleware
+│   ├── crud/               # CRUD operations middleware
+│   ├── error/              # Error handling
+│   └── notFound/           # 404 handler
 ├── services/               # Business logic
 ├── utils/                  # Utility functions
-├── constants/              # Application constants
-├── instances/              # Service instances
-├── tests/                  # Global test utilities
+│   ├── database/           # Database utilities
+│   └── zodValidation/      # Validation schemas
+├── config/                 # Configuration
 └── server.ts               # Application entry point
 ```
 
@@ -32,8 +35,8 @@ src/
 
 ### Prerequisites
 - Node.js (v18 or higher)
-- SQL Server
 - npm or yarn
+- Microsoft SQL Server
 
 ### Installation
 
@@ -65,35 +68,48 @@ npm run dev
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm test` - Run tests
-- `npm run test:watch` - Run tests in watch mode
 - `npm run lint` - Run ESLint
 - `npm run lint:fix` - Fix ESLint errors
 
 ## API Endpoints
 
-The API follows RESTful conventions with versioning:
+The API is versioned and follows RESTful conventions:
 
 - Base URL: `http://localhost:3000/api/v1`
-- Health Check: `GET /health`
+- Health Check: `http://localhost:3000/health`
 
 ### External Endpoints (Public)
-- `/api/v1/external/*` - Public API endpoints
+- `/api/v1/external/*` - Public endpoints
 
 ### Internal Endpoints (Authenticated)
-- `/api/v1/internal/*` - Authenticated API endpoints
+- `/api/v1/internal/*` - Authenticated endpoints
 
 ## Environment Variables
 
 See `.env.example` for all available configuration options.
 
+Key variables:
+- `PORT` - Server port (default: 3000)
+- `DB_HOST` - Database host
+- `DB_PORT` - Database port
+- `DB_USER` - Database user
+- `DB_PASSWORD` - Database password
+- `DB_NAME` - Database name
+
 ## Development Guidelines
 
+### Code Style
 - Follow TypeScript strict mode
-- Use ESLint for code quality
-- Write tests for all business logic
-- Follow REST API best practices
-- Document all API endpoints
+- Use 2 spaces for indentation
+- Maximum line length: 120 characters
+- Use single quotes for strings
+- Always use semicolons
+
+### Naming Conventions
+- Files: camelCase (e.g., `userService.ts`)
+- Classes: PascalCase (e.g., `CrudController`)
+- Functions: camelCase (e.g., `getUserById`)
+- Constants: UPPER_SNAKE_CASE (e.g., `MAX_RETRIES`)
 
 ## License
-
 ISC

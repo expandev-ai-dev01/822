@@ -43,8 +43,8 @@ export class CrudController {
     permission: string
   ): Promise<[ValidationResult | null, any]> {
     try {
-      const params = { ...req.params, ...req.query, ...req.body };
-      const validated = await schema.parseAsync(params);
+      const paramsData = { ...req.params, ...req.query, ...req.body };
+      const validatedParams = await schema.parseAsync(paramsData);
 
       const credential = {
         idAccount: 1,
@@ -54,12 +54,20 @@ export class CrudController {
       return [
         {
           credential,
-          params: validated,
+          params: validatedParams,
         },
         null,
       ];
-    } catch (error) {
-      return [null, error];
+    } catch (error: any) {
+      return [
+        null,
+        {
+          statusCode: 400,
+          code: 'VALIDATION_ERROR',
+          message: 'Validation failed',
+          details: error.errors,
+        },
+      ];
     }
   }
 }
@@ -68,6 +76,8 @@ export const successResponse = (data: any) => {
   return {
     success: true,
     data: data,
-    timestamp: new Date().toISOString(),
+    metadata: {
+      timestamp: new Date().toISOString(),
+    },
   };
 };

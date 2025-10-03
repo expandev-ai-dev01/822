@@ -2,9 +2,9 @@ import sql from 'mssql';
 import { config } from '../../config';
 
 export enum ExpectedReturn {
-  Single = 'Single',
-  Multi = 'Multi',
-  None = 'None',
+  Single = 'single',
+  Multi = 'multi',
+  None = 'none',
 }
 
 let pool: sql.ConnectionPool | null = null;
@@ -40,26 +40,23 @@ export const dbRequest = async (
 
     const result = await request.execute(routine);
 
-    if (expectedReturn === ExpectedReturn.None) {
-      return null;
+    switch (expectedReturn) {
+      case ExpectedReturn.Single:
+        return result.recordset[0];
+      case ExpectedReturn.Multi:
+        if (resultSetNames && resultSetNames.length > 0) {
+          const namedResults: any = {};
+          resultSetNames.forEach((name, index) => {
+            namedResults[name] = result.recordsets[index];
+          });
+          return namedResults;
+        }
+        return result.recordsets;
+      case ExpectedReturn.None:
+        return null;
+      default:
+        return result.recordset;
     }
-
-    if (expectedReturn === ExpectedReturn.Single) {
-      return result.recordset[0] || null;
-    }
-
-    if (expectedReturn === ExpectedReturn.Multi) {
-      if (resultSetNames && resultSetNames.length > 0) {
-        const namedResults: any = {};
-        resultSetNames.forEach((name, index) => {
-          namedResults[name] = result.recordsets[index] || [];
-        });
-        return namedResults;
-      }
-      return result.recordsets;
-    }
-
-    return result.recordset;
   } catch (error: any) {
     console.error('Database error:', error);
     throw error;
