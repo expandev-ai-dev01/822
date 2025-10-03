@@ -1,0 +1,62 @@
+[
+  {
+    "id": "python",
+    "name": "Python",
+    "extension": ".py",
+    "identifier": "python"
+  },
+  {
+    "id": "javascript",
+    "name": "JavaScript",
+    "extension": ".js",
+    "identifier": "javascript"
+  },
+  {
+    "id": "java",
+    "name": "Java",
+    "extension": ".java",
+    "identifier": "java"
+  },
+  {
+    "id": "csharp",
+    "name": "C#",
+    "extension": ".cs",
+    "identifier": "csharp"
+  },
+  {
+    "id": "cpp",
+    "name": "C++",
+    "extension": ".cpp",
+    "identifier": "cpp"
+  },
+  {
+    "id": "ruby",
+    "name": "Ruby",
+    "extension": ".rb",
+    "identifier": "ruby"
+  },
+  {
+    "id": "go",
+    "name": "Go",
+    "extension": ".go",
+    "identifier": "go"
+  },
+  {
+    "id": "rust",
+    "name": "Rust",
+    "extension": ".rs",
+    "identifier": "rust"
+  },
+  {
+    "id": "php",
+    "name": "PHP",
+    "extension": ".php",
+    "identifier": "php"
+  },
+  {
+    "id": "typescript",
+    "name": "TypeScript",
+    "extension": ".ts",
+    "identifier": "typescript"
+  }
+]

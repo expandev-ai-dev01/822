@@ -4,8 +4,12 @@ import { RootLayout } from '@/pages/layouts/RootLayout';
 import { LoadingSpinner } from '@/core/components/LoadingSpinner';
 import { ErrorBoundary } from '@/core/components/ErrorBoundary';
 
-const HomePage = lazy(() => import('@/pages/Home'));
-const NotFoundPage = lazy(() => import('@/pages/NotFound'));
+const HomePage = lazy(() =>
+  import('@/pages/Home').then((module) => ({ default: module.HomePage }))
+);
+const NotFoundPage = lazy(() =>
+  import('@/pages/NotFound').then((module) => ({ default: module.NotFoundPage }))
+);
 
 /**
  * @router AppRouter
@@ -24,7 +28,11 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
-    errorElement: <ErrorBoundary />,
+    errorElement: (
+      <ErrorBoundary>
+        <div>An error occurred</div>
+      </ErrorBoundary>
+    ),
     children: [
       {
         index: true,
